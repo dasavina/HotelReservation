@@ -2,6 +2,8 @@ package hotelreservation.customers.Controllers;
 
 import hotelreservation.customers.Dtos.CustomerDTO;
 import hotelreservation.customers.Services.CustomerService;
+import hotelreservation.customers.Services.RoomIntegrationService;
+import hotelreservation.rooms.Dtos.RoomDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +12,11 @@ import java.util.List;
 @RequestMapping("/api/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final RoomIntegrationService roomIntegrationService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, RoomIntegrationService roomIntegrationService) {
         this.customerService = customerService;
+        this.roomIntegrationService = roomIntegrationService;
     }
 
     @GetMapping
@@ -38,5 +42,9 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
+    }
+    @GetMapping("/api/customers/rooms")
+    public List<RoomDTO> getAvailableRooms() {
+        return roomIntegrationService.fetchAvailableRooms();
     }
 }
