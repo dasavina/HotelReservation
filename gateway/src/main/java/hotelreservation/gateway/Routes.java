@@ -15,19 +15,19 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> customerServiceRoute() {
         return route("customer_service")
-                .route(RequestPredicates.path("/api/customer"), http("http://localhost:8082"))
+                .route(RequestPredicates.path("/api/customer"), http(System.getenv("CUSTOMER_URL")))
                 .build();
     }
     @Bean
     public RouterFunction<ServerResponse> reservationServiceRoute() {
         return route("reservation_service")
-                .route(RequestPredicates.path("/api/reservation"), http("http://localhost:8083"))
+                .route(RequestPredicates.path("/api/reservation"), http(System.getenv("RESERVATION_URL")))
                 .build();
     }
     @Bean
     public RouterFunction<ServerResponse> roomServiceRoute() {
         return route("room_service")
-                .route(RequestPredicates.path("/api/room"), http("http://localhost:8081"))
+                .route(RequestPredicates.path("/api/room"), http(System.getenv("ROOM_URL")))
                 .build();
     }
 }

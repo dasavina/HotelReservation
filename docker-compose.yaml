@@ -1,5 +1,8 @@
+version: '3.8'
 services:
-  shared-mysql-db:
+  # MySQL database
+  shared-mysql-db
+    :
     image: mysql:8
     container_name: shared-mysql-db
     environment:
@@ -8,6 +11,78 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
-volumes:
-  db_data:
+      - ./docker/mysql/data:/var/lib/mysql
+    networks:
+      - hotel-network
+
+  # Room Service
+  room-service:
+    image: room-service
+    build:
+      context: ./room-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://shared-mysql-db:3306/hotel_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 15243
+    ports:
+      - "8081:8081"
+    depends_on:
+      - shared-mysql-db
+    networks:
+      - hotel-network
+
+  # Customer Service
+  customer-service:
+    image: customer-service
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://shared-mysql-db:3306/hotel_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 15243
+    ports:
+      - "8082:8082"
+    depends_on:
+      - shared-mysql-db
+    networks:
+      - hotel-network
+
+  # Reservation Service
+  reservation-service:
+    image: reservation-service
+    build:
+      context: ./reservation-service
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://shared-mysql-db:3306/hotel_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 15243
+      CUSTOMER_SERVICE_URL: http://customer-service:8082
+      ROOM_SERVICE_URL: http://room-service:8081
+    ports:
+      - "8083:8083"
+    depends_on:
+      - shared-mysql-db
+    networks:
+      - hotel-network
+
+  # API Gateway
+  api-gateway:
+    image: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    environment:
+      ROOM_SERVICE_URL: http://room-service:8081
+      CUSTOMER_SERVICE_URL: http://customer-service:8082
+      RESERVATION_SERVICE_URL: http://reservation-service:8083
+    ports:
+      - "9000:9000"
+    networks:
+      - hotel-network
+
+networks:
+  hotel-network:
+    driver: bridge
