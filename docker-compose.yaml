@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   # MySQL database
-  shared-mysql-db
-    :
+  shared-mysql-db:
     image: mysql:8
     container_name: shared-mysql-db
     environment:
@@ -12,6 +11,22 @@ services:
       - "3307:3306"
     volumes:
       - ./docker/mysql/data:/var/lib/mysql
+    networks:
+      - hotel-network
+
+
+  keycloak-mysql:
+    container_name: keycloak-mysql
+    image: mysql:8
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/mysql_keycloak/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 15243
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
     networks:
       - hotel-network
 
@@ -82,6 +97,24 @@ services:
       - "9000:9000"
     networks:
       - hotel-network
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:24.0.1
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://keycloak-mysql:3306/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./docker/keycloak/realms:/opt/keycloak/data/import/
+    depends_on:
+      - keycloak-mysql
 
 networks:
   hotel-network:
