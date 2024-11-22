@@ -4,6 +4,7 @@ import hotelreservation.rooms.Dtos.RoomDTO;
 import hotelreservation.rooms.Dtos.RoomMapper;
 import hotelreservation.rooms.Entities.Room;
 import hotelreservation.rooms.Repositories.RoomRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -14,6 +15,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;
 
+    @Autowired
     public RoomService(RoomRepository roomRepository, RoomMapper roomMapper) {
         this.roomRepository = roomRepository;
         this.roomMapper = roomMapper;
