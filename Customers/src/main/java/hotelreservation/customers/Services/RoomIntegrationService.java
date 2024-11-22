@@ -1,7 +1,7 @@
 package hotelreservation.customers.Services;
 
 import hotelreservation.customers.Clients.RoomClient;
-import hotelreservation.rooms.Dtos.RoomDTO;
+import hotelreservation.customers.Dtos.RoomDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class RoomIntegrationService {
     }
 
     public List<RoomDTO> fetchAvailableRooms() {
-        return roomClient.getAllRooms();
+        return roomClient.getRooms();
     }
 }
 

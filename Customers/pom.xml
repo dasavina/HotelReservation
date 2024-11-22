@@ -10,7 +10,7 @@
     </parent>
     <groupId>HotelReservation</groupId>
     <artifactId>Customers</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Customers</name>
     <description>Customers</description>
     <url/>
@@ -78,12 +78,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>4.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>HotelReservation</groupId>
-            <artifactId>Rooms</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>

@@ -1,9 +1,9 @@
 package hotelreservation.customers.Controllers;
 
 import hotelreservation.customers.Dtos.CustomerDTO;
+import hotelreservation.customers.Dtos.RoomDTO;
 import hotelreservation.customers.Services.CustomerService;
 import hotelreservation.customers.Services.RoomIntegrationService;
-import hotelreservation.rooms.Dtos.RoomDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +43,7 @@ public class CustomerController {
     public void deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
     }
+
     @GetMapping("/api/customers/rooms")
     public List<RoomDTO> getAvailableRooms() {
         return roomIntegrationService.fetchAvailableRooms();
